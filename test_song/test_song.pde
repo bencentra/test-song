@@ -73,6 +73,9 @@ void draw() {
     else if (lastKey == '3') {
       playTestThree();
     }
+    else if (lastKey == '4') {
+      playTestFour();
+    }
     else {
       playTestOne();
     }
@@ -121,6 +124,9 @@ void keyPressed() {
         }
         else if (lastKey == '3') {
           setupTestThree();
+        }
+        else if (lastKey == '4') {
+          setupTestFour();
         }
         else {
           setupTestOne();
@@ -301,5 +307,44 @@ void playTestThree() {
       c.addNote(channel3, pitchesInC[p3] - 12, 100, beatsToMils(2));
       tracks[1].addChord(c);
     }
+  }
+}
+
+/*
+* Test Four - Variable tempo song in 3/4
+*/
+void setupTestFour() {
+  // Set the BPM
+  BPM = 80;
+  last = millis();
+  last2 = 0;
+  // Setup the tracks
+  tracks[0] = new RiriSequence();
+  tracks[0].addNote(channel1, 36, 100, beatsToMils(1));
+  tracks[0].addNote(channel1, 36, 100, beatsToMils(1));
+  tracks[0].addNote(channel1, 36, 100, beatsToMils(1));
+  tracks[1] = new RiriSequence();
+  tracks[1].addNote(channel2, pitchesInF[0], 100, beatsToMils(1));
+  tracks[1].addNote(channel2, pitchesInF[0], 100, beatsToMils(1));
+  tracks[1].addNote(channel2, pitchesInF[0], 100, beatsToMils(1));
+  tracks[2] = new RiriSequence();
+  tracks[2].addNote(channel4, pitchesInF[0] - 36, 100, beatsToMils(1));
+  tracks[2].addNote(channel4, pitchesInF[0] - 36, 100, beatsToMils(1));
+  tracks[2].addNote(channel4, pitchesInF[0] - 36, 100, beatsToMils(1));
+}
+
+void playTestFour() {
+  int delta = round(((height/2) - mouseY)/10);
+  BPM = 80 + delta*2;
+  if (millis() > last + beatsToMils(1) - 10) {
+    // Adjust the tempo
+    println("BPM: " + BPM);
+    // Add notes to the tracks
+    tracks[0].addNote(channel1, 36, 100, beatsToMils(1));
+    pitch = (int) random(0, pitchesInF.length);
+    tracks[1].addNote(channel2, pitchesInF[pitch], 100, beatsToMils(1));
+    tracks[2].addNote(channel4, pitchesInF[pitch] - 36, 100, beatsToMils(1));
+    // Update last
+    last =  millis();
   }
 }
